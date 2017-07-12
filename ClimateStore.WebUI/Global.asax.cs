@@ -13,8 +13,8 @@ namespace ClimateStore.WebUI
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-           // WebApiConfig.Register(GlobalConfiguration.Configuration);
-           // FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //WebApiConfig.Register(GlobalConfiguration.Configuration);
+            //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());

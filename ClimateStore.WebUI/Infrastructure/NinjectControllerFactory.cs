@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using ClimateStore.Domain.Concrete;
 
 
 namespace ClimateStore.WebUI.Infrastructure
@@ -33,14 +34,17 @@ namespace ClimateStore.WebUI.Infrastructure
         private void AddBindings()
         {
             // конфигурирование контейнера
-            Mock<IProductRepository> mock = new Mock<IProductRepository>();
-            mock.Setup(m => m.Products).Returns(new List<Product> {
-                new Product { Name = "Ensa Cr500T Wh", Price = 2300},
-                new Product { Name = "Teplov Y2000", Price = 3200},
-                new Product { Name = "Water Filter NEOS 101P", Price = 4100}
-            }.AsQueryable()); //AsQueryable метод расширения LINQ, преобразует IEnumerable<T> в IQueryable<T>
+            //Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            //mock.Setup(m => m.Products).Returns(new List<Product> {
+            //    new Product { Name = "Ensa Cr500T Wh", Price = 2300},
+            //    new Product { Name = "Teplov Y2000", Price = 3200},
+            //    new Product { Name = "Water Filter NEOS 101P", Price = 4100}
+            //}.AsQueryable()); //AsQueryable метод расширения LINQ, преобразует IEnumerable<T> в IQueryable<T>
 
-            ninjectKernel.Bind<IProductRepository>().ToConstant(mock.Object);
+            //ninjectKernel.Bind<IProductRepository>().ToConstant(mock.Object);
+
+            // замена привязки Ninject к имитированному хранилищу на привязку к реальному хранилищу
+            ninjectKernel.Bind<IProductRepository>().To<EFProductRepository>();
         }
     }
 }
