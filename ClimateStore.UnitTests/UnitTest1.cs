@@ -32,7 +32,7 @@ namespace ClimateStore.UnitTests
             controller.PageSize = 3;
             //Act
             //IEnumerable<Product> result = (IEnumerable<Product>)controller.List(2).Model;
-            ProductsListViewModel result = (ProductsListViewModel)controller.List(null,2).Model;
+            ProductsListViewModel result = (ProductsListViewModel)controller.List(null, 2).Model;
             //Assert
             Product[] prodArray = result.Products.ToArray();
             Assert.IsTrue(prodArray.Length == 2);
@@ -81,7 +81,7 @@ namespace ClimateStore.UnitTests
             ProductController controller = new ProductController(mock.Object);
             controller.PageSize = 3;
             //ACT
-            ProductsListViewModel result = (ProductsListViewModel)controller.List(null,2).Model;
+            ProductsListViewModel result = (ProductsListViewModel)controller.List(null, 2).Model;
             //ASSERT
             PagingInfo pageInfo = result.PagingInfo;
             Assert.AreEqual(pageInfo.CurrentPage, 2);
@@ -95,7 +95,7 @@ namespace ClimateStore.UnitTests
             //Arrange
             //-Create the mock repository
             Mock<IProductRepository> mock = new Mock<IProductRepository>();
-            mock.Setup(m => m.Products).Returns( new Product[] {
+            mock.Setup(m => m.Products).Returns(new Product[] {
                 new Product {ProductID = 1, Name = "P1", Category = "Cat1"},
                 new Product {ProductID = 2, Name = "P2", Category = "Cat2"},
                 new Product {ProductID = 3, Name = "P3", Category = "Cat1"},
@@ -136,10 +136,34 @@ namespace ClimateStore.UnitTests
             Assert.AreEqual(results[0], "Apples");
             Assert.AreEqual(results[1], "Oranges");
             Assert.AreEqual(results[2], "Plums");
-/*создали имитированную реализацию хранилища, которая содержит повторяющиеся и
-неотсортированные категории. Утверждение заключается в том, что все повторяющиеся 
-строки будут удалены и данные будут отсортированы в алфавитном порядке*/
+            /*создали имитированную реализацию хранилища, которая содержит повторяющиеся и
+            неотсортированные категории. Утверждение заключается в том, что все повторяющиеся 
+            строки будут удалены и данные будут отсортированы в алфавитном порядке*/
         }
+
+        [TestMethod]
+        public void Indicates_Selected_Category()
+        {
+            // Arrange
+            // - create the mock repository
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns( new Product[]
+            {
+                new Product {ProductID = 1, Name = "P1", Category = "Apples"},
+                new Product {ProductID = 4, Name = "P2", Category = "Oranges"},
+            }.AsQueryable());
+            //Arrange - create the controller
+            NavController target = new NavController(mock.Object);
+            // Arrange - define the category to selected
+            string categoryToSelect = "Apples";
+
+            //Action
+            string result = target.Menu(categoryToSelect).ViewBag.SelectedCategory;
+
+            //Assert
+            Assert.AreEqual(categoryToSelect, result);
+        }
+
     }
 }
 /*

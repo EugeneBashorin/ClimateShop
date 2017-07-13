@@ -15,13 +15,14 @@ namespace ClimateStore.WebUI.Controllers
         {
             repository = repo;
         }
-        public PartialViewResult Menu()
+        public PartialViewResult Menu(string category =null)
         {
-            IEnumerable<string> category = repository.Products
+            ViewBag.SelectedCategory = category;
+            IEnumerable<string> categories = repository.Products
                 .Select(x => x.Category)
                 .Distinct()//Выборка по уникальным значениям
                 .OrderBy(x => x);
-            return PartialView(category);
+            return PartialView(categories);
         }
         // GET: Nav
        // public string Menu()
