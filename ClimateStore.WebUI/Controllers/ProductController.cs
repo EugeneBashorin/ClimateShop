@@ -18,12 +18,13 @@ namespace ClimateStore.WebUI.Controllers
             this.repository = productRepository;
         }
 
-        public ViewResult List(int page = 1)
+        public ViewResult List(string category,int page = 1)//add category
         {
             //объект ProductsListViewModel в качестве данных модели в представлени
             ProductsListViewModel model = new ProductsListViewModel
             {
                 Products = repository.Products
+                .Where(p => category == null || p.Category == category)// если category не содержит null, будут выбраны только те объекты Product, которые соответствуют свойству Category
                 .OrderBy(p => p.ProductID)            //упорядочиваем их по первичному ключу
                 .Skip((page - 1) * PageSize)         //пропускаем товары которые идут до начала нашей страницы
                 .Take(PageSize),                    //берем количество товаров, указанное в поле PageSize
@@ -32,7 +33,8 @@ namespace ClimateStore.WebUI.Controllers
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
                     TotalItems = repository.Products.Count()
-                }
+                },
+                CurrentCategory = category //установили значение свойства CurrentCategory, добавленного в класс ProductsListViewModel
             };
             return View(model);
             //return View(repository.Products         //получаемобъекты Product из хранилища

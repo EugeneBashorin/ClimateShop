@@ -21,12 +21,11 @@ DIV#header {
     }
 
 DIV#content {
-   padding-left: 15px;
+    padding-left: 15px;
     padding-right: 15px;
-     border-left: 2px solid gray;
+    border-left: 2px solid gray;
     margin-left: 9em;
     padding: 1em;
-
 }
 
 DIV#categories {
@@ -79,6 +78,27 @@ DIV.pager {
             color: White;
         }
 
+DIV#categories A {
+    font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+    display: block;
+    text-decoration: none;
+    padding: .6em;
+    color: Black;
+    border-bottom: 1px solid silver;
+}
+
+    DIV#categories A.selected {
+        background-color: #666;
+        color: White;
+    }
+
+    DIV#categories A:hover {
+        background-color: #CCC;
+    }
+
+    DIV#categories A.selected:hover {
+        background-color: #666;
+    }
 /*body {
     padding-top: 50px;
     padding-bottom: 20px;

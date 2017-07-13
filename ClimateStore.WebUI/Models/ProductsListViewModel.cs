@@ -11,5 +11,7 @@ namespace ClimateStore.WebUI.Models
     {
         public IEnumerable<Product> Products { get; set; }
         public PagingInfo PagingInfo { get; set; }
+        //связь выбранной на данный момент категории с представлением, чтобы визуализировать боковую панель
+        public string CurrentCategory { get; set; }
     }
 }

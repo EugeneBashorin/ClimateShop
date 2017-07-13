@@ -1,0 +1,13 @@
+﻿@model IEnumerable<string>
+@Html.ActionLink("Home", "List","Product")
+@foreach (var link in Model)
+{
+    //позволяет поставлять набор пар имя/значение, которые учитываются при генерации URL на основе конфигурации маршрутизации
+     @Html.RouteLink(link, new
+{
+    controller = "Product",
+    action = "List",
+    category = link,
+    page = 1
+})
+}
