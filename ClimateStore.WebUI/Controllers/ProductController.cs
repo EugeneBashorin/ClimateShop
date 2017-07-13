@@ -32,7 +32,11 @@ namespace ClimateStore.WebUI.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = repository.Products.Count()
+                    
+                    //Если категория выбрана, возвращаем количество товаров в этой категории, если нет, возвращаем общее количество товаров.
+                    TotalItems = category == null ?
+                    repository.Products.Count() :
+                    repository.Products.Where(e => e.Category == category).Count()
                 },
                 CurrentCategory = category //установили значение свойства CurrentCategory, добавленного в класс ProductsListViewModel
             };

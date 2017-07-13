@@ -43,7 +43,7 @@ namespace ClimateStore.UnitTests
         [TestMethod]
         public void Can_Generate_Page_Links()//тест: создание ссылок на страницы
         {
-            // Arrange - define an HTML helper - we need to do this
+            // Arrange - define an HTML helper - we need to do this 
             // in order to apply the extension method
             HtmlHelper myHelper = null;
 
@@ -92,8 +92,7 @@ namespace ClimateStore.UnitTests
         [TestMethod]
         public void Can_Filter_Product()
         {
-            //Arrange
-            //-Create the mock repository
+            //Arrange - Create the mock repository
             Mock<IProductRepository> mock = new Mock<IProductRepository>();
             mock.Setup(m => m.Products).Returns(new Product[] {
                 new Product {ProductID = 1, Name = "P1", Category = "Cat1"},
@@ -118,8 +117,7 @@ namespace ClimateStore.UnitTests
         [TestMethod]
         public void Can_Create_Categories()
         {
-            //Arrange
-            // - create the mock repository
+            //Arrange - create the mock repository
             Mock<IProductRepository> mock = new Mock<IProductRepository>();
             mock.Setup(m => m.Products).Returns(new Product[] {
                 new Product {ProductID = 1, Name = "P1", Category = "Apples"},
@@ -144,10 +142,9 @@ namespace ClimateStore.UnitTests
         [TestMethod]
         public void Indicates_Selected_Category()
         {
-            // Arrange
-            // - create the mock repository
+            // Arrange - create the mock repository
             Mock<IProductRepository> mock = new Mock<IProductRepository>();
-            mock.Setup(m => m.Products).Returns( new Product[]
+            mock.Setup(m => m.Products).Returns(new Product[]
             {
                 new Product {ProductID = 1, Name = "P1", Category = "Apples"},
                 new Product {ProductID = 4, Name = "P2", Category = "Oranges"},
@@ -163,8 +160,37 @@ namespace ClimateStore.UnitTests
             //Assert
             Assert.AreEqual(categoryToSelect, result);
         }
+        [TestMethod]
+        public void Generate_Category_Specific_Product_Count()
+        {
+            //Arrange-create create the mock repository
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[] {
+                    new Product {ProductID = 1, Name = "P1", Category = "Cat1"},
+                    new Product {ProductID = 2, Name = "P2", Category = "Cat2"},
+                    new Product {ProductID = 3, Name = "P3", Category = "Cat1"},
+                    new Product {ProductID = 4, Name = "P4", Category = "Cat2"},
+                    new Product {ProductID = 5, Name = "P5", Category = "Cat3"}
+            }.AsQueryable());
+            //Arrange - create a controller and make the page size 3 items
+            ProductController target = new ProductController(mock.Object);
+            target.PageSize = 3;
+
+            // Action - test the product counts for different categories
+            int res1 = ((ProductsListViewModel)target.List("Cat1").Model).PagingInfo.TotalItems;
+            int res2 = ((ProductsListViewModel)target.List("Cat2").Model).PagingInfo.TotalItems;
+            int res3 = ((ProductsListViewModel)target.List("Cat3").Model).PagingInfo.TotalItems;
+            int resAll = ((ProductsListViewModel)target.List(null).Model).PagingInfo.TotalItems;
+
+            // Assert
+            Assert.AreEqual(res1,2);
+            Assert.AreEqual(res2,2);
+            Assert.AreEqual(res3,1);
+            Assert.AreEqual(resAll,5);
+        }
 
     }
+   
 }
 /*
  вызываем свойство Model в результате, чтобы получить последовательность IEnumerable<Product>,
