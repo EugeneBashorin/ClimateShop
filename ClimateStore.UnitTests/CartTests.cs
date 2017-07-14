@@ -2,11 +2,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ClimateStore.Domain.Entities;
 using System.Linq;
+using Moq;
+using ClimateStore.Domain.Abstract;
+using ClimateStore.WebUI.Controllers;
+using System.Web.Mvc;
+using ClimateStore.WebUI.Models;
 
 namespace ClimateStore.UnitTests
 {
     [TestClass]
-   public class CartTests
+    public class CartTests
     {
         [TestMethod]
         public void Can_Add_New_Lines()
@@ -74,7 +79,7 @@ namespace ClimateStore.UnitTests
         public void Calculate_Cart_Total()
         {
             // Arrange - create some test products
-            Product p1 = new Product { ProductID = 1, Name = "P1",Price=100M };
+            Product p1 = new Product { ProductID = 1, Name = "P1", Price = 100M };
             Product p2 = new Product { ProductID = 2, Name = "P2", Price = 50M };
             //// Arrange - create new cart
             Cart target = new Cart();
@@ -104,5 +109,62 @@ namespace ClimateStore.UnitTests
             //Assert
             Assert.AreEqual(target.Lines.Count(), 0);
         }
+
+/*Метод AddToCart должен добавить выбранный товар в корзину покупателя.*/
+        [TestMethod]
+        public void Can_Add_To_Cart()
+        {
+            // Arrange - create the mock repository
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[] 
+            {
+              new Product { ProductID = 1, Name = "P1", Category = "Apples" }      
+            }.AsQueryable());
+            // Arrange - create a Cart
+            Cart cart = new Cart();
+            // Arrange - create the controller
+            CartController target = new CartController(mock.Object);
+            // Act - add a product to the cart
+            target.AddToCart(cart,1,null);
+            // Assert
+            Assert.AreEqual(cart.Lines.Count(),1);
+            Assert.AreEqual(cart.Lines.ToArray()[0].Product.ProductID, 1);
         }
+
+/*После добавления товара в корзину он должен перенаправить нас в представление Index.*/
+        [TestMethod]
+        public void Adding_Product_To_Cart_Goes_To_Cart_Screen()
+        {
+            // Arrange - create the mock repository
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns( new Product[]
+            {
+                new Product { ProductID = 1, Category = "Apple", Name = "P1" }
+            }.AsQueryable());
+            // Arrange - create a Cart
+            Cart cart = new Cart();
+            // Arrange - create the controller
+            CartController target = new CartController(mock.Object);
+            // Act - add a product to the cart
+            RedirectToRouteResult result = target.AddToCart(cart, 1, "myUrl");
+            // Assert
+            Assert.AreEqual(result.RouteValues["action"],"Index");
+            Assert.AreEqual(result.RouteValues["returnUrl"],"myUrl");
+        }
+
+        /*URL, по которому пользователь сможет вернуться в каталог, должен быть корректно передан в метод действия Index.*/
+        [TestMethod]
+        public void Can_View_Cart_Contents()
+        {
+            // Arrange - create a Cart
+            Cart cart = new Cart();
+            // Arrange - create the controller
+            CartController target = new CartController(null);
+            // Act - call the Index action method
+            CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
+            // Assert
+            Assert.AreSame(result.Cart,cart);
+            Assert.AreEqual(result.ReturnUrl,"myUrl");
+        }
+    }
 }
