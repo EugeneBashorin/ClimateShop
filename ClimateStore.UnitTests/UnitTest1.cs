@@ -160,6 +160,7 @@ namespace ClimateStore.UnitTests
             //Assert
             Assert.AreEqual(categoryToSelect, result);
         }
+
         [TestMethod]
         public void Generate_Category_Specific_Product_Count()
         {
@@ -183,14 +184,12 @@ namespace ClimateStore.UnitTests
             int resAll = ((ProductsListViewModel)target.List(null).Model).PagingInfo.TotalItems;
 
             // Assert
-            Assert.AreEqual(res1,2);
-            Assert.AreEqual(res2,2);
-            Assert.AreEqual(res3,1);
-            Assert.AreEqual(resAll,5);
-        }
-
+            Assert.AreEqual(res1, 2);
+            Assert.AreEqual(res2, 2);
+            Assert.AreEqual(res3, 1);
+            Assert.AreEqual(resAll, 5);
+        }      
     }
-   
 }
 /*
  вызываем свойство Model в результате, чтобы получить последовательность IEnumerable<Product>,
