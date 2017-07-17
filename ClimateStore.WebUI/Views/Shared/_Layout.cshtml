@@ -12,7 +12,7 @@
         <div class="title">CLIMATE STORE</div>
     </div>
     <div id="categories">
-        @{Html.RenderAction("Menu", "Nav");}@*RenderAction записывает свое содержание непосредственно в поток ответа, как и метод
+        @{Html.RenderAction("Menu", "Nav");} @*RenderAction записывает свое содержание непосредственно в поток ответа, как и метод
                                               RenderPartial. Это означает, что метод возвращает void, и поэтому его нельзя использовать
                                               с регулярным тегом Razor @. Вместо этого мы должны заключить вызов метода в блок кода Razor *@
     </div>
