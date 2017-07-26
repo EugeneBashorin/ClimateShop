@@ -8,6 +8,7 @@ using ClimateStore.Domain.Entities;
 
 namespace ClimateStore.WebUI.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         public IProductRepository repository;

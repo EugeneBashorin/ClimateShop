@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using ClimateStore.Domain.Concrete;
 using System.Configuration;
+using ClimateStore.WebUI.Infrastructure.Abstract;
+using ClimateStore.WebUI.Infrastructure.Concrete;
 
 
 namespace ClimateStore.WebUI.Infrastructure
@@ -53,6 +55,9 @@ namespace ClimateStore.WebUI.Infrastructure
             ninjectKernel.Bind<IOrderProcessor>()
                 .To<EmailOrderProcessor>()
                 .WithConstructorArgument("settings", emailSettings);
+
+            //Bind Authenticate
+            ninjectKernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
         }
     }
 }
