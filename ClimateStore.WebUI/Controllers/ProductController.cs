@@ -47,5 +47,23 @@ namespace ClimateStore.WebUI.Controllers
             //    .Take(PageSize));                   //берем количество товаров, указанное в поле PageSize
 
         }
+
+        public FileContentResult GetImage(int productId)
+        {
+            Product prod = repository.Products.FirstOrDefault(p => p.ProductID == productId);
+            if (prod != null)
+            {
+                return File(prod.ImageData, prod.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
+            /*
+             метод пытается найти товар, который соответствует указанному в параметре ID.
+            Он возвращает класс FileContentResult, когда мы хотим вернуть файл браузеру клиента,
+            и экземпляры создаются с помощью метода File базового класса контроллера
+             */
+        }
     }
 }
